@@ -34,9 +34,14 @@ const CartPage = () => {
 
   const handleIncreaseQuantity = useCallback(
     (productId, currentQuantity) => {
-      updateQuantity(productId, currentQuantity + 1)
+      const item = items.find((item) => item.id === productId)
+      const itemTitle = item?.title ?? 'Item'
+      const newQuantity = currentQuantity + 1
+
+      updateQuantity(productId, newQuantity)
+      toast.success(`${itemTitle} quantity updated to ${newQuantity}`)
     },
-    [updateQuantity],
+    [updateQuantity, items],
   )
 
   const handleDecreaseQuantity = useCallback(
@@ -45,9 +50,14 @@ const CartPage = () => {
         return
       }
 
-      updateQuantity(productId, currentQuantity - 1)
+      const item = items.find((item) => item.id === productId)
+      const itemTitle = item?.title ?? 'Item'
+      const newQuantity = currentQuantity - 1
+
+      updateQuantity(productId, newQuantity)
+      toast.success(`${itemTitle} quantity updated to ${newQuantity}`)
     },
-    [updateQuantity],
+    [updateQuantity, items],
   )
 
   const handleRemoveItem = useCallback(

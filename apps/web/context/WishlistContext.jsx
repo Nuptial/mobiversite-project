@@ -1,121 +1,141 @@
-'use client'
+"use client";
 
-import { createContext, useContext, useEffect, useMemo, useRef, useState } from 'react'
+import {
+  createContext,
+  useContext,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 
-const WISHLIST_STORAGE_KEY = 'wishlist'
+const WISHLIST_STORAGE_KEY = "wishlist";
 
-const WishlistContext = createContext(undefined)
+const WishlistContext = createContext(undefined);
 
 const readStoredWishlist = () => {
-  if (typeof window === 'undefined') return []
+  if (typeof window === "undefined") return [];
 
-  const storedValue = window.localStorage.getItem(WISHLIST_STORAGE_KEY)
-  if (!storedValue) return []
+  const storedValue = window.localStorage.getItem(WISHLIST_STORAGE_KEY);
+  if (!storedValue) return [];
 
   try {
-    const parsedValue = JSON.parse(storedValue)
-    return Array.isArray(parsedValue) ? parsedValue : []
+    const parsedValue = JSON.parse(storedValue);
+    return Array.isArray(parsedValue) ? parsedValue : [];
   } catch {
-    return []
+    return [];
   }
-}
+};
 
 const WishlistProvider = ({ children }) => {
-  const [items, setItems] = useState([])
-  const hasHydratedRef = useRef(false)
+  const [items, setItems] = useState([]);
+  const [isHydrated, setIsHydrated] = useState(false);
+  const hasHydratedRef = useRef(false);
 
   useEffect(() => {
-    if (typeof window === 'undefined') return
+    if (typeof window === "undefined") return;
 
-    const storedItems = readStoredWishlist()
+    const storedItems = readStoredWishlist();
     if (!storedItems.length) {
-      hasHydratedRef.current = true
-      return
+      hasHydratedRef.current = true;
+      setIsHydrated(true);
+      return;
     }
 
-    setItems(storedItems)
-    hasHydratedRef.current = true
-  }, [])
+    setItems(storedItems);
+    hasHydratedRef.current = true;
+    setIsHydrated(true);
+  }, []);
 
   useEffect(() => {
-    if (typeof window === 'undefined') return
-    if (!hasHydratedRef.current) return
+    if (typeof window === "undefined") return;
+    if (!hasHydratedRef.current) return;
 
-    window.localStorage.setItem(WISHLIST_STORAGE_KEY, JSON.stringify(items))
-  }, [items])
+    window.localStorage.setItem(WISHLIST_STORAGE_KEY, JSON.stringify(items));
+  }, [items]);
 
   const addItem = (product) => {
-    if (!product?.id) return
+    if (!product?.id) return;
 
     setItems((previousItems) => {
-      const exists = previousItems.some((item) => item.id === product.id)
-      if (exists) return previousItems
+      const exists = previousItems.some((item) => item.id === product.id);
+      if (exists) return previousItems;
 
       const nextItem = {
         id: product.id,
         title: product.title,
         price: Number(product.price) || 0,
-        image: product.image ?? '',
-      }
+        image: product.image ?? "",
+      };
 
-      return [...previousItems, nextItem]
-    })
-  }
+      return [...previousItems, nextItem];
+    });
+  };
 
   const removeItem = (productId) => {
-    setItems((previousItems) => previousItems.filter((item) => item.id !== productId))
-  }
+    setItems((previousItems) =>
+      previousItems.filter((item) => item.id !== productId)
+    );
+  };
 
   const toggleItem = (product) => {
-    if (!product?.id) return
+    if (!product?.id) return;
 
     setItems((previousItems) => {
-      const exists = previousItems.some((item) => item.id === product.id)
+      const exists = previousItems.some((item) => item.id === product.id);
       if (exists) {
-        return previousItems.filter((item) => item.id !== product.id)
+        return previousItems.filter((item) => item.id !== product.id);
       }
 
       const nextItem = {
         id: product.id,
         title: product.title,
         price: Number(product.price) || 0,
-        image: product.image ?? '',
-      }
+        image: product.image ?? "",
+      };
 
-      return [...previousItems, nextItem]
-    })
-  }
+      return [...previousItems, nextItem];
+    });
+  };
 
-  const wishlistIds = useMemo(() => new Set(items.map((item) => item.id)), [items])
+  const wishlistIds = useMemo(
+    () => new Set(items.map((item) => item.id)),
+    [items]
+  );
 
-  const isInWishlist = (productId) => wishlistIds.has(productId)
+  const isInWishlist = (productId) => wishlistIds.has(productId);
 
   const clearWishlist = () => {
-    setItems([])
-  }
+    setItems([]);
+  };
 
-  const itemCount = items.length
+  const itemCount = items.length;
 
   const value = {
     items,
     itemCount,
+    isHydrated,
     addItem,
     removeItem,
     toggleItem,
     isInWishlist,
     clearWishlist,
-  }
+  };
 
-  return <WishlistContext.Provider value={value}>{children}</WishlistContext.Provider>
-}
+  return (
+    <WishlistContext.Provider value={value}>
+      {children}
+    </WishlistContext.Provider>
+  );
+};
 
 const useWishlist = () => {
-  const context = useContext(WishlistContext)
+  const context = useContext(WishlistContext);
   if (!context) {
-    throw new Error('useWishlist must be used within a WishlistProvider')
+    throw new Error("useWishlist must be used within a WishlistProvider");
   }
 
-  return context
-}
+  return context;
+};
 
-export { WishlistProvider, useWishlist }
+export { WishlistProvider, useWishlist };

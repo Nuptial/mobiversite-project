@@ -1,6 +1,6 @@
-import { clsx } from "clsx"
-import { twMerge } from "tailwind-merge"
+import { clsx } from "clsx";
+import { twMerge } from "tailwind-merge";
 
-const cn = (...inputs) => twMerge(clsx(inputs))
+const cn = (...inputs) => twMerge(clsx(inputs));
 
-export { cn }
+export { cn };

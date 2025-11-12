@@ -54,6 +54,14 @@ const ProfilePage = async ({ searchParams }) => {
   const showOrderSuccess = resolvedSearchParams?.showOrderSuccess === 'true'
   const hasOrders = Array.isArray(orders) && orders.length > 0
 
+  const sortedOrders = hasOrders
+    ? [...orders].sort((a, b) => {
+        const dateA = new Date(a.date).getTime()
+        const dateB = new Date(b.date).getTime()
+        return dateB - dateA
+      })
+    : []
+
   return (
     <section className="space-y-6">
       <header className="space-y-2">
@@ -76,12 +84,55 @@ const ProfilePage = async ({ searchParams }) => {
           You do not have any orders yet.
         </div>
       ) : (
-        <ul className="space-y-3">
-          {orders.map((order) => (
-            <li key={order.id} className="rounded-2xl bg-white p-4 shadow">
-              <div className="text-sm text-neutral-500">{formatOrderDate(order.date)}</div>
-              <div className="text-lg font-semibold text-neutral-900">Total: {money(order.total)}</div>
-              <div className="text-sm text-neutral-600">Items: {order.items?.length ?? 0}</div>
+        <ul className="space-y-4">
+          {sortedOrders.map((order) => (
+            <li key={order.id} className="rounded-2xl bg-white shadow">
+              <div className="p-4 sm:p-6">
+                <div className="mb-4 flex items-start justify-between gap-4 border-b border-neutral-200 pb-4">
+                  <div className="flex-1 space-y-1">
+                    <div className="text-xs font-medium uppercase tracking-wide text-neutral-500">
+                      {formatOrderDate(order.date)}
+                    </div>
+                    {order.items && order.items.length > 0 && (
+                      <div className="text-xs text-neutral-600">
+                        {order.items.length} {order.items.length === 1 ? 'item' : 'items'}
+                      </div>
+                    )}
+                  </div>
+                  <div className="text-right">
+                    <div className="text-xs font-medium text-neutral-500">Total</div>
+                    <div className="text-xl font-bold text-neutral-900">{money(order.total)}</div>
+                  </div>
+                </div>
+
+                {order.items && order.items.length > 0 && (
+                  <div>
+                    <ul className="space-y-2">
+                      {order.items.map((item, index) => (
+                        <li
+                          key={item.id ?? index}
+                          className="flex items-center justify-between gap-4 rounded-lg border border-neutral-200 px-3 py-2.5"
+                        >
+                          <div className="flex-1 min-w-0">
+                            <p className="text-sm font-medium text-neutral-900">{item.title ?? 'Unknown Item'}</p>
+                            <div className="mt-0.5 flex items-center gap-2 text-xs text-neutral-500">
+                              <span>Quantity: {item.quantity ?? 1}</span>
+                              {item.price && <span>× {money(item.price)}</span>}
+                            </div>
+                          </div>
+                          {item.price && item.quantity && (
+                            <div className="shrink-0 text-right">
+                              <div className="text-sm font-semibold text-neutral-900">
+                                {money(item.price * item.quantity)}
+                              </div>
+                            </div>
+                          )}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+              </div>
             </li>
           ))}
         </ul>

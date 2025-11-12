@@ -7,11 +7,24 @@ import { money } from '@/lib/currency'
 import { useWishlist } from '@/context/WishlistContext'
 
 const WishlistPage = () => {
-  const { items, removeItem } = useWishlist()
+  const { items, removeItem, isHydrated } = useWishlist()
   const hasItems = items.length > 0
 
   const handleRemove = (productId) => {
     removeItem(productId)
+  }
+
+  if (!isHydrated) {
+    return (
+      <section className="rounded-2xl bg-white p-8 shadow">
+        <div className="flex h-64 items-center justify-center">
+          <div className="flex flex-col items-center gap-3" role="status" aria-live="polite">
+            <span className="inline-block h-10 w-10 animate-spin rounded-full border-4 border-neutral-300 border-t-neutral-900" />
+            <span className="text-sm font-medium text-neutral-600">Loading wishlist...</span>
+          </div>
+        </div>
+      </section>
+    )
   }
 
   if (!hasItems) {

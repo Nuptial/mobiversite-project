@@ -1,11 +1,12 @@
-import Link from "next/link"
+import Link from "next/link";
 
-import CartNavLink from "../components/cart-nav-link"
-import HeaderBar from "../components/header-bar"
-import LogoutButton from "../components/logout-button"
-import { getCurrentUser } from "../lib/auth"
-import "./globals.css"
-import Providers from "./providers"
+import CartNavLink from "../components/cart-nav-link";
+import HeaderBar from "../components/header-bar";
+import LogoutButton from "../components/logout-button";
+import MobileNavigation from "../components/mobile-navigation";
+import { getCurrentUser } from "../lib/auth";
+import "./globals.css";
+import Providers from "./providers";
 
 const Logo = () => (
   <svg
@@ -14,7 +15,7 @@ const Logo = () => (
     height="20"
     viewBox="0 0 187 25"
     fill="none"
-    className="h-6 w-auto text-neutral-900"
+    className="h-5 w-auto text-neutral-900 sm:h-6"
     role="img"
     aria-label="Mobiversite"
   >
@@ -91,54 +92,68 @@ const Logo = () => (
       ></path>
     </g>
   </svg>
-)
+);
 
 const Navigation = async () => {
-  const currentUser = await getCurrentUser()
+  const currentUser = await getCurrentUser();
 
   return (
-    <nav className="flex items-center gap-3 text-sm font-medium text-neutral-700">
-      <Link
-        href="/products"
-        className="rounded-full px-3 py-1 transition hover:bg-neutral-100 focus:outline-none focus-visible:ring-2 focus-visible:ring-neutral-900 focus-visible:ring-offset-2"
-      >
-        Products
-      </Link>
-      <CartNavLink />
-      {currentUser ? (
+    <>
+      <MobileNavigation currentUser={currentUser} />
+      <nav className="hidden items-center gap-2 text-sm font-medium text-neutral-700 md:flex md:gap-3">
         <Link
-          href="/wishlist"
+          href="/products"
+          className="rounded-full px-3 py-1 transition hover:bg-neutral-100 focus:outline-none focus-visible:ring-2 focus-visible:ring-neutral-900 focus-visible:ring-offset-2"
+        >
+          Products
+        </Link>
+        <CartNavLink />
+        {currentUser ? (
+          <Link
+            href="/wishlist"
+            prefetch={false}
+            className="rounded-full px-3 py-1 transition hover:bg-neutral-100 focus:outline-none focus-visible:ring-2 focus-visible:ring-neutral-900 focus-visible:ring-offset-2"
+          >
+            Wishlist
+          </Link>
+        ) : null}
+        <Link
+          href="/profile"
           prefetch={false}
           className="rounded-full px-3 py-1 transition hover:bg-neutral-100 focus:outline-none focus-visible:ring-2 focus-visible:ring-neutral-900 focus-visible:ring-offset-2"
         >
-          Wishlist
+          Profile
         </Link>
-      ) : null}
-      <Link
-        href="/profile"
-        prefetch={false}
-        className="rounded-full px-3 py-1 transition hover:bg-neutral-100 focus:outline-none focus-visible:ring-2 focus-visible:ring-neutral-900 focus-visible:ring-offset-2"
-      >
-        Profile
-      </Link>
-      {currentUser ? (
-        <div className="flex items-center gap-2 rounded-full bg-neutral-100 px-3 py-1">
-          <span className="text-xs font-semibold text-neutral-700" aria-label={`Logged in as ${currentUser.email}`}>
-            {currentUser.email}
-          </span>
-          <LogoutButton />
-        </div>
-      ) : (
-        <Link
-          href="/login"
-          className="rounded-full bg-neutral-900 px-3 py-1 text-white transition hover:bg-neutral-800 focus:outline-none focus-visible:ring-2 focus-visible:ring-neutral-900 focus-visible:ring-offset-2"
-        >
-          Login
-        </Link>
-      )}
-    </nav>
-  )
-}
+        {currentUser ? (
+          <div className="flex items-center gap-2 rounded-full bg-neutral-100 px-3 py-1">
+            <span
+              className="hidden truncate text-xs font-semibold text-neutral-700 lg:inline lg:max-w-none"
+              aria-label={`Logged in as ${currentUser.email}`}
+              title={currentUser.email}
+            >
+              {currentUser.email}
+            </span>
+            <span
+              className="truncate text-xs font-semibold text-neutral-700 md:inline lg:hidden"
+              aria-label={`Logged in as ${currentUser.email}`}
+              title={currentUser.email}
+            >
+              {currentUser.email.split("@")[0]}
+            </span>
+            <LogoutButton />
+          </div>
+        ) : (
+          <Link
+            href="/login"
+            className="rounded-full bg-neutral-900 px-3 py-1 text-sm text-white transition hover:bg-neutral-800 focus:outline-none focus-visible:ring-2 focus-visible:ring-neutral-900 focus-visible:ring-offset-2"
+          >
+            Login
+          </Link>
+        )}
+      </nav>
+    </>
+  );
+};
 
 const RootLayout = async ({ children }) => {
   return (
@@ -148,7 +163,7 @@ const RootLayout = async ({ children }) => {
           <HeaderBar>
             <Link
               href="/"
-              className="flex items-center text-neutral-900 focus:outline-none focus-visible:ring-2 focus-visible:ring-neutral-900 focus-visible:ring-offset-2"
+              className="flex shrink-0 items-center text-neutral-900 focus:outline-none focus-visible:ring-2 focus-visible:ring-neutral-900 focus-visible:ring-offset-2"
               aria-label="Go to Mobiversite home"
             >
               <Logo />
@@ -156,12 +171,12 @@ const RootLayout = async ({ children }) => {
             <Navigation />
           </HeaderBar>
           <div className="mx-auto max-w-6xl px-4">
-            <main className="pt-28 pb-10">{children}</main>
+            <main className="pt-20 pb-10 sm:pt-24 md:pt-28">{children}</main>
           </div>
         </Providers>
       </body>
     </html>
-  )
-}
+  );
+};
 
-export default RootLayout
+export default RootLayout;

@@ -1,18 +1,18 @@
-'use client'
+"use client";
 
-import { useMemo, useState } from 'react'
-import { toast } from 'react-hot-toast'
+import { useMemo, useState } from "react";
+import { toast } from "react-hot-toast";
 
-import { useCart } from '@/context/CartContext'
+import { useCart } from "@/context/CartContext";
 
 const AddToCartButton = ({ product }) => {
-  const { addItem } = useCart()
+  const { addItem } = useCart();
 
-  const [isAdding, setIsAdding] = useState(false)
+  const [isAdding, setIsAdding] = useState(false);
 
   const normalizedProduct = useMemo(() => {
     if (!product) {
-      return undefined
+      return undefined;
     }
 
     return {
@@ -20,32 +20,32 @@ const AddToCartButton = ({ product }) => {
       title: product.title,
       price: product.price,
       image: product.image,
-    }
-  }, [product])
+    };
+  }, [product]);
 
   const handleAddToCart = () => {
     if (isAdding) {
-      return
+      return;
     }
 
     if (!normalizedProduct?.id) {
-      return
+      return;
     }
 
-    setIsAdding(true)
-    addItem(normalizedProduct)
-    toast.success(`${normalizedProduct.title ?? 'Item'} added to cart`)
-    setIsAdding(false)
-  }
+    setIsAdding(true);
+    addItem(normalizedProduct);
+    toast.success(`${normalizedProduct.title ?? "Item"} added to cart`);
+    setIsAdding(false);
+  };
 
   const handleKeyDown = (event) => {
-    if (event.key !== 'Enter' && event.key !== ' ') {
-      return
+    if (event.key !== "Enter" && event.key !== " ") {
+      return;
     }
 
-    event.preventDefault()
-    handleAddToCart()
-  }
+    event.preventDefault();
+    handleAddToCart();
+  };
 
   return (
     <button
@@ -56,10 +56,9 @@ const AddToCartButton = ({ product }) => {
       aria-label="Add this product to cart"
       disabled={isAdding}
     >
-      {isAdding ? 'Adding...' : 'Add to cart'}
+      {isAdding ? "Adding..." : "Add to cart"}
     </button>
-  )
-}
+  );
+};
 
-export default AddToCartButton
-
+export default AddToCartButton;

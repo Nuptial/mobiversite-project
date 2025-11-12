@@ -1,7 +1,9 @@
 {
   "name": "mobiversite-mono",
   "private": true,
-  "workspaces": ["apps/*"],
+  "workspaces": [
+    "apps/*"
+  ],
   "scripts": {
     "dev": "npm-run-all -p dev:api dev:web",
     "dev:api": "npm --prefix apps/api run dev",

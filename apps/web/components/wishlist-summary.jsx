@@ -1,29 +1,38 @@
-'use client'
+"use client";
 
-import Link from 'next/link'
+import Link from "next/link";
 
-import { money } from '@/lib/currency'
-import { useWishlist } from '@/context/WishlistContext'
+import { money } from "@/lib/currency";
+import { useWishlist } from "@/context/WishlistContext";
 
 const WishlistSummary = () => {
-  const { items, itemCount } = useWishlist()
-  const hasItems = itemCount > 0
-  const previewItems = items.slice(0, 3)
+  const { items, itemCount } = useWishlist();
+  const hasItems = itemCount > 0;
+  const previewItems = items.slice(0, 3);
 
   return (
     <section className="space-y-3 rounded-2xl bg-white p-6 shadow">
       <header className="space-y-1">
         <h2 className="text-lg font-semibold text-neutral-900">Wishlist</h2>
         <p className="text-sm text-neutral-600">
-          {hasItems ? `You have ${itemCount} saved item${itemCount === 1 ? '' : 's'}` : 'No items saved yet.'}
+          {hasItems
+            ? `You have ${itemCount} saved item${itemCount === 1 ? "" : "s"}`
+            : "No items saved yet."}
         </p>
       </header>
       {hasItems ? (
         <ul className="space-y-2">
           {previewItems.map((item) => (
-            <li key={item.id} className="flex items-center justify-between gap-2 rounded-xl bg-neutral-50 px-3 py-2">
-              <span className="text-sm font-medium text-neutral-800 line-clamp-1">{item.title}</span>
-              <span className="text-sm text-neutral-600">{money(item.price)}</span>
+            <li
+              key={item.id}
+              className="flex items-center justify-between gap-2 rounded-xl bg-neutral-50 px-3 py-2"
+            >
+              <span className="text-sm font-medium text-neutral-800 line-clamp-1">
+                {item.title}
+              </span>
+              <span className="text-sm text-neutral-600">
+                {money(item.price)}
+              </span>
             </li>
           ))}
         </ul>
@@ -37,7 +46,7 @@ const WishlistSummary = () => {
         </Link>
       </div>
     </section>
-  )
-}
+  );
+};
 
-export default WishlistSummary
+export default WishlistSummary;

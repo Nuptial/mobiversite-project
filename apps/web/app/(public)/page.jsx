@@ -1,11 +1,5 @@
 import Link from "next/link"
-import {
-  Carousel,
-  CarouselContent,
-  CarouselItem,
-  CarouselNext,
-  CarouselPrevious,
-} from "@/components/ui/carousel"
+import FeaturedProductsCarousel from "@/components/featured-products-carousel"
 
 const fetchFeaturedProducts = async () => {
   if (!process.env.NEXT_PUBLIC_API_URL) {
@@ -157,43 +151,7 @@ const HomePage = async () => {
           <h2 className="text-2xl font-semibold text-neutral-900">Featured products</h2>
           <p className="text-sm text-neutral-600">Explore a curated selection picked just for you.</p>
         </header>
-        {featuredProducts.length === 0 ? (
-          <div className="rounded-2xl bg-neutral-50 p-6 text-neutral-600">
-            No featured products available right now. Please check back soon.
-          </div>
-        ) : (
-          <Carousel className="w-full">
-            <CarouselContent className="md:-ml-3 lg:-ml-4">
-              {featuredProducts.map((product) => (
-                <CarouselItem
-                  key={product.id}
-                  className="md:basis-1/2 md:pl-3 lg:basis-1/3 xl:basis-1/4 2xl:basis-1/5"
-                  aria-label={`Featured product ${product.title}`}
-                >
-                  <Link
-                    href={`/products/${product.id}`}
-                    aria-label={`View details for ${product.title}`}
-                    className="flex h-full flex-col justify-between gap-4 rounded-2xl bg-white p-4 shadow-sm transition-transform duration-200 ease-out hover:-translate-y-1 hover:shadow-lg focus:outline-none focus-visible:ring-2 focus-visible:ring-neutral-900 focus-visible:ring-offset-2"
-                  >
-                    <div className="flex justify-center">
-                      <img
-                        src={product.image}
-                        alt={product.title}
-                        className="h-40 w-full max-w-[200px] object-contain"
-                      />
-                    </div>
-                    <div className="space-y-2">
-                      <p className="text-sm font-medium text-neutral-900 line-clamp-2">{product.title}</p>
-                      <p className="text-lg font-semibold text-neutral-900">${product.price}</p>
-                    </div>
-                  </Link>
-                </CarouselItem>
-              ))}
-            </CarouselContent>
-            <CarouselPrevious />
-            <CarouselNext />
-          </Carousel>
-        )}
+        <FeaturedProductsCarousel products={featuredProducts} />
       </section>
 
       <section className="rounded-3xl bg-white p-8 shadow-sm md:p-12">
