@@ -1,0 +1,17 @@
+{
+  "name": "mobiversite-api",
+  "private": true,
+  "type": "commonjs",
+  "scripts": {
+    "dev": "node server.js",
+    "start": "node server.js",
+    "seed": "node scripts/seed.js"
+  },
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
+    "json-server": "^0.17.4",
+    "json-server-auth": "^2.1.0"
+  }
+}
