@@ -4,6 +4,7 @@ import Link from "next/link";
 
 import { money } from "@/lib/currency";
 
+import AddToCartButton from "./add-to-cart-button";
 import WishlistToggleButton from "./wishlist-toggle-button";
 
 const ProductCard = ({ product, isAuthenticated = true }) => {
@@ -30,15 +31,16 @@ const ProductCard = ({ product, isAuthenticated = true }) => {
           </p>
         </div>
       </Link>
-      {isAuthenticated ? (
-        <div className="mt-4">
+      <div className="mt-4 flex flex-col gap-2">
+        <AddToCartButton product={product} size="sm" />
+        {isAuthenticated && (
           <WishlistToggleButton
             product={product}
             size="sm"
             isAuthenticated={isAuthenticated}
           />
-        </div>
-      ) : null}
+        )}
+      </div>
     </article>
   );
 };

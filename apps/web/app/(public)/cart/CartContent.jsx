@@ -183,7 +183,7 @@ const CartContent = () => {
                     {item.title}
                   </p>
                   <p className="text-sm text-neutral-600">
-                    {money(item.price)}
+                    {money(item.price * item.quantity)}
                   </p>
                 </div>
 

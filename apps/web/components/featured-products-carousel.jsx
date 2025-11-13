@@ -21,7 +21,7 @@ const FeaturedProductsCarouselClient = dynamic(
   }
 )
 
-const FeaturedProductsCarousel = ({ products }) => {
+const FeaturedProductsCarousel = ({ products, isAuthenticated = false }) => {
   if (products.length === 0) {
     return (
       <div className="rounded-2xl bg-neutral-50 p-6 text-neutral-600">
@@ -30,7 +30,12 @@ const FeaturedProductsCarousel = ({ products }) => {
     )
   }
 
-  return <FeaturedProductsCarouselClient products={products} />
+  return (
+    <FeaturedProductsCarouselClient
+      products={products}
+      isAuthenticated={isAuthenticated}
+    />
+  )
 }
 
 export default FeaturedProductsCarousel

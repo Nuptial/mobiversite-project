@@ -1,5 +1,6 @@
 import Link from "next/link"
 import FeaturedProductsCarousel from "@/components/featured-products-carousel"
+import { getCurrentUser } from "@/lib/auth"
 
 const fetchFeaturedProducts = async () => {
   if (!process.env.NEXT_PUBLIC_API_URL) {
@@ -77,7 +78,10 @@ const testimonials = [
 ]
 
 const HomePage = async () => {
-  const featuredProducts = await fetchFeaturedProducts()
+  const [featuredProducts, currentUser] = await Promise.all([
+    fetchFeaturedProducts(),
+    getCurrentUser(),
+  ])
 
   return (
     <div className="space-y-16">
@@ -151,7 +155,10 @@ const HomePage = async () => {
           <h2 className="text-2xl font-semibold text-neutral-900">Featured products</h2>
           <p className="text-sm text-neutral-600">Explore a curated selection picked just for you.</p>
         </header>
-        <FeaturedProductsCarousel products={featuredProducts} />
+        <FeaturedProductsCarousel
+          products={featuredProducts}
+          isAuthenticated={Boolean(currentUser)}
+        />
       </section>
 
       <section className="rounded-3xl bg-white p-8 shadow-sm md:p-12">
