@@ -246,7 +246,7 @@
     {
       "id": 1,
       "email": "demo@mobiversite.io",
-      "password": "123456",
+      "password": "$2a$10$XN2w.vt/UttF9f6eOgTNKeOiUKJrUBQyfoxY/9e27yOBUWCt7sQIK",
       "name": "Demo User",
       "wishlist": []
     }
