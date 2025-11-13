@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useMemo } from "react";
 import { toast } from "react-hot-toast";
 
 import { useCart } from "@/context/CartContext";
@@ -8,8 +8,6 @@ import CartQuantityControls from "./cart-quantity-controls";
 
 const AddToCartButton = ({ product, size = "md" }) => {
   const { addItem, items } = useCart();
-
-  const [isAdding, setIsAdding] = useState(false);
 
   const normalizedProduct = useMemo(() => {
     if (!product) {
@@ -32,18 +30,12 @@ const AddToCartButton = ({ product, size = "md" }) => {
   }, [items, normalizedProduct]);
 
   const handleAddToCart = () => {
-    if (isAdding) {
-      return;
-    }
-
     if (!normalizedProduct?.id) {
       return;
     }
 
-    setIsAdding(true);
     addItem(normalizedProduct);
     toast.success(`${normalizedProduct.title ?? "Item"} added to cart`);
-    setIsAdding(false);
   };
 
   const handleKeyDown = (event) => {
@@ -76,9 +68,8 @@ const AddToCartButton = ({ product, size = "md" }) => {
       onClick={handleAddToCart}
       onKeyDown={handleKeyDown}
       aria-label="Add this product to cart"
-      disabled={isAdding}
     >
-      {isAdding ? "Adding..." : "Add to cart"}
+      Add to cart
     </button>
   );
 };
