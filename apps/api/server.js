@@ -15,6 +15,11 @@ app.use(
 );
 
 app.use(jsonServer.defaults());
+
+app.get("/healthz", (_req, res) => {
+  res.status(200).send("ok");
+});
+
 app.db = router.db;
 app.use(auth);
 app.use(router);
